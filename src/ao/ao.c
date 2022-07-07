@@ -63,27 +63,32 @@ aop_t ao_assert(const char *descr, void *data, size_t ncase, size_t casesz,
 	return AOP_PASS;
 }
 
+static void ao_nop() { }
+
 aop_t ao_run(ao_t *ao)
 {
 	size_t ncase;
 	void *data;
+	void (*at_case_fail)(const void *) = ao->at_case_fail ? ao->at_case_fail : (void (*)(const void *))ao_nop;
+	void (*at_case_exit)(void *) = ao->at_case_exit ? ao->at_case_exit : (void (*)(void *))ao_nop;
 	if (ao_setdefs(ao) != AOP_PASS)
 		return AOP_SKIP;
 	ncase = ao->ncase;
-	data = ao->data;
+	data = (char *)ao->data - ao->casesz;
+	fstdout("%s\n", ao->descr);
 	while (ncase--) {
-		aop_t aop = (*ao->assert_case)(data);
+		aop_t aop = (*ao->assert_case)(data = (char *)data + ao->casesz);
 		if (ao->inc == AOINC_AUTO)
 			ao_log(aop, ao);
-		if (ao->fmt_case)
-			(*ao->fmt_case)(data);
-		if (ao->at_case_exit)
-			(*ao->at_case_exit)(data);
-		if (aop == AOP_FAIL && ao->mode == AOMODE_STOP) {
-			ao_stats(ao);
+		if (aop == AOP_FAIL) {
+			(*at_case_fail)(data);
+			if (ao->mode == AOMODE_STOP) {
+				(*at_case_exit)(data);
+				ao_stats(ao);
+			}
 			return AOP_FAIL;
 		}
-		data = (char *)data + ao->casesz;
+		(*at_case_exit)(data);
 	}
 	ao_stats(ao);
 	return AOP_PASS;
