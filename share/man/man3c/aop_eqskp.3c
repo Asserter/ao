@@ -1,0 +1,154 @@
+'\" te
+.\" بسم الله
+.\" Copyright (c) 2022, Asserter, Org. All Rights Reserved.
+.TH aop_eqskp 3c "Jul 2022" "SunOS 5.11" "C Library Functions"
+.SH NAME
+aop_xx_eqskp \- assert operation for equality or skip
+.SH SYNOPSIS
+.LP
+.nf
+#include <ao/aop.h>
+
+\fBaop_t\fR \fBaop_char_eqskp\fR(\fBchar\fR \fIactual\fR, \fBchar\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_shrt_eqskp\fR(\fBshort\fR \fIactual\fR, \fBshort\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_int_eqskp\fR(\fBint\fR \fIactual\fR, \fBint\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_long_eqskp\fR(\fBlong\fR \fIactual\fR, \fBlong\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_llong_eqskp\fR(\fBlong long\fR \fIactual\fR, \fBlong long\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_uchar_eqskp\fR(\fBunsigned char\fR \fIactual\fR, \fBunsigned char\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_ushrt_eqskp\fR(\fBunsigned short\fR \fIactual\fR, \fBunsigned short\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_uint_eqskp\fR(\fBunsigned int\fR \fIactual\fR, \fBunsigned int\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_ulong_eqskp\fR(\fBunsigned long\fR \fIactual\fR, \fBunsigned long\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_ullong_eqskp\fR(\fBunsigned long long\fR \fIactual\fR, \fBunsigned long long\fR \fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_flt_eqskp\fR(\fBfloat\fR \fIactual\fR, \fBfloat\fR \fIexpected\fR, \fBfloat\fR \fIreltol\fR, \fBfloat\fR \fIabstol\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_dbl_eqskp\fR(\fBdouble\fR \fIactual\fR, \fBdouble\fR \fIexpected\fR, \fBdouble\fR \fIreltol\fR, \fBdouble\fR \fIabstol\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_str_eqskp\fR(\fBconst char *\fR\fIactual\fR, \fBconst char *\fR\fIexpected\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_mem_eqskp\fR(\fBconst void *\fR\fIactual\fR, \fBconst void *\fR\fIexpected\fR, \fBsize_t\fR \fIn\fR, \fBsize_t\fR \fIsize\fR);
+.fi
+
+.LP
+.nf
+\fBaop_t\fR \fBaop_list_eqskp\fR(\fBconst void *\fR\fIactual\fR, \fBconst void *\fR\fIexpected\fR,
+     \fBint\fR \fB(*\fR\fIcmp\fR)(const void *, const void *), \fBvoid *\fR\fB(*\fR\fInxt\fR)(const void *));
+.fi
+
+.SH DESCRIPTION
+.sp
+.LP
+The \fBaop_char_eqskp()\fR and \fBaop_uchar_eqskp()\fR functions assert \fIactual\fR and \fIexpected\fR characters for equality.
+
+.sp
+.LP
+The \fBaop_shrt_eqskp()\fR, \fBaop_int_eqskp()\fR, \fBaop_long_eqskp()\fR, \fBaop_llong_eqskp()\fR, \fBaop_ushrt_eqskp()\fR, \fBaop_uint_eqskp()\fR, \fBaop_ulong_eqskp()\fR and \fBaop_ullong_eqskp()\fR functions assert \fIactual\fR and \fIexpected\fR integer numbers for equality.
+.sp
+
+.LP
+The \fBaop_flt_eqskp()\fR and \fBaop_dbl_eqskp()\fR functions assert \fIactual\fR and \fIexpected\fR floating-point numbers for equality using relative \fIreltol\fR and absolute \fIabstol\fR tolerance.
+.sp
+
+.LP
+The \fBaop_str_eqskp()\fR function asserts \fIactual\fR and \fIexpected\fR strings for equality byte-by-byte, accoring to the current machine's character set ordering.
+.sp
+
+.LP
+The \fBaop_mem_eqskp()\fR function asserts \fIactual\fR and \fIexpected\fR memory for equality, checking the first \fIn\fR blocks where a block consists of \fIsize\fR bytes (each interpreted as an \fBunsigned char\fR).
+.sp
+
+.LP
+The \fBaop_list_eqskp()\fR function asserts \fIactual\fR and \fIexpected\fR lists for equality. The \fIcmp\fR function should be supplied to assist assertion that returns zero in case of equality of items being compared and non-zero otherwise. The \fInxt\fR function should be supplied to traverse items in the list that returns a pointer to the next item or \fINULL\fR in case of no items left.
+.sp
+
+.SH RETURN VALUES
+.sp
+.LP
+Upon successful assert operation, the \fBaop_xx_eqskp()\fR functions return \fBAOP_PASS\fR. Otherwise, \fBAOP_SKIP\fR is returned and the assert operation is not considered to be failed but skipped. The test continues to run the remaining assert operations.
+
+.SH ATTRIBUTES
+.sp
+.LP
+See \fBattributes\fR(5) for descriptions of the following attributes:
+.sp
+
+.sp
+.TS
+tab(@) box;
+cw(2.75i) |cw(2.75i)
+lw(2.75i) |lw(2.75i)
+.
+ATTRIBUTE TYPE@ATTRIBUTE VALUE
+_
+Interface Stability@Committed
+_
+MT-Level@Safe
+_
+Standard@None
+.TE
+
+.SH SEE ALSO
+.sp
+.LP
+\fBaop_eq\fR(3C), \fBaop_cmp\fR(3C), \fBaop.h\fR(3HEAD), \fBao.h\fR(3HEAD)
+
+.SH NOTES
+.sp
+.LP
+When both \fIactual\fR and \fIexpected\fR arguments are \fINULL\fR the \fBaop_str_eqskp()\fR, \fBaop_mem_eqskp()\fR and \fBaop_list_eqskp()\fR functions return \fBAOP_PASS\fR and the assert operation is considered to be successfull.
+
+.SH AUTHOR
+Written by Ali Muhammed <uniapi@outlook.com>
+.SH COPYRIGHT
+Copyright (c) 2022 Asserter, Org.
+.PP
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the Open Software License ("\s-1OSL\s0"), Version 3.0

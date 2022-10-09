@@ -40,16 +40,16 @@ typedef enum aopmode {
 	AOPMODE_GE
 } aopmode_t;
 
-/* (integral integral aopmode_t -> aop_t) */
-#define AOP_CMP(actual, expected, mode) \
+/* (aopmode_t integral integral -> aop_t) */
+#define AOP_CMP(mode, actual, expected) \
 	((actual) == (expected) & (mode) || \
 	 (actual) < (expected) & (mode) >> 1 || \
 	 (actual) > (expected) & (mode) >> 2 || \
 	 (actual) != (expected) & ~(mode) & 1 \
 	? AOP_PASS : AOP_FAIL)
 
-/* (integral integral aopmode_t -> aop_t) */
-#define AOP_SKIP_CMP(actual, expected, mode) \
+/* (aopmode_t integral integral -> aop_t) */
+#define AOP_SKIP_CMP(mode, actual, expected) \
 	((actual) == (expected) & (mode) || \
 	 (actual) < (expected) & (mode) >> 1 || \
 	 (actual) > (expected) & (mode) >> 2 || \
@@ -106,48 +106,46 @@ aop_t aop_list_skip_eq(const void *actual, const void *expected,
 	int (*cmp)(const void *, const void *), void *(*nxt)(const void *));
 
 
-aop_t aop_char_cmp(char actual, char expected, aopmode_t mode);
-aop_t aop_shrt_cmp(short actual, short expected, aopmode_t mode);
-aop_t aop_int_cmp(int actual, int expected, aopmode_t mode);
-aop_t aop_long_cmp(long actual, long expected, aopmode_t mode);
-aop_t aop_llong_cmp(long long actual, long long expected, aopmode_t mode);
+aop_t aop_char_cmp(aopmode_t mode, char actual, char expected);
+aop_t aop_shrt_cmp(aopmode_t mode, short actual, short expected);
+aop_t aop_int_cmp(aopmode_t mode, int actual, int expected);
+aop_t aop_long_cmp(aopmode_t mode, long actual, long expected);
+aop_t aop_llong_cmp(aopmode_t mode, long long actual, long long expected);
 
-aop_t aop_uchar_cmp(unsigned char actual, unsigned char expected, aopmode_t mode);
-aop_t aop_ushrt_cmp(unsigned short actual, unsigned short expected, aopmode_t mode);
-aop_t aop_uint_cmp(unsigned actual, unsigned expected, aopmode_t mode);
-aop_t aop_ulong_cmp(unsigned long actual, unsigned long expected, aopmode_t mode);
-aop_t aop_ullong_cmp(unsigned long long actual, unsigned long long expected, aopmode_t mode);
+aop_t aop_uchar_cmp(aopmode_t mode, unsigned char actual, unsigned char expected);
+aop_t aop_ushrt_cmp(aopmode_t mode, unsigned short actual, unsigned short expected);
+aop_t aop_uint_cmp(aopmode_t mode, unsigned actual, unsigned expected);
+aop_t aop_ulong_cmp(aopmode_t mode, unsigned long actual, unsigned long expected);
+aop_t aop_ullong_cmp(aopmode_t mode, unsigned long long actual, unsigned long long expected);
 
-aop_t aop_flt_cmp(float actual, float expected, float reltol, float abstol, aopmode_t mode);
-aop_t aop_dbl_cmp(double actual, double expected, double reltol, double abstol, aopmode_t mode);
+aop_t aop_flt_cmp(aopmode_t mode, float actual, float expected, float reltol, float abstol);
+aop_t aop_dbl_cmp(aopmode_t mode, double actual, double expected, double reltol, double abstol);
 
-aop_t aop_str_cmp(const char *actual, const char *expected, aopmode_t mode);
-aop_t aop_mem_cmp(const void *actual, const void *expected, size_t n, size_t size, aopmode_t mode);
-aop_t aop_list_cmp(const void *actual, const void *expected,
-	int (*cmp)(const void *, const void *), void *(*nxt)(const void *), aopmode_t mode);
+aop_t aop_str_cmp(aopmode_t mode, const char *actual, const char *expected);
+aop_t aop_mem_cmp(aopmode_t mode, const void *actual, const void *expected, size_t n, size_t size);
+aop_t aop_list_cmp(aopmode_t mode, const void *actual, const void *expected,
+	int (*cmp)(const void *, const void *), void *(*nxt)(const void *));
 
 
-aop_t aop_char_skip_cmp(char actual, char expected, aopmode_t mode);
-aop_t aop_shrt_skip_cmp(short actual, short expected, aopmode_t mode);
-aop_t aop_int_skip_cmp(int actual, int expected, aopmode_t mode);
-aop_t aop_long_skip_cmp(long actual, long expected, aopmode_t mode);
-aop_t aop_llong_skip_cmp(long long actual, long long expected, aopmode_t mode);
+aop_t aop_char_skip_cmp(aopmode_t mode, char actual, char expected);
+aop_t aop_shrt_skip_cmp(aopmode_t mode, short actual, short expected);
+aop_t aop_int_skip_cmp(aopmode_t mode, int actual, int expected);
+aop_t aop_long_skip_cmp(aopmode_t mode, long actual, long expected);
+aop_t aop_llong_skip_cmp(aopmode_t mode, long long actual, long long expected);
 
-aop_t aop_uchar_skip_cmp(unsigned char actual, unsigned char expected, aopmode_t mode);
-aop_t aop_ushrt_skip_cmp(unsigned short actual, unsigned short expected, aopmode_t mode);
-aop_t aop_uint_skip_cmp(unsigned actual, unsigned expected, aopmode_t mode);
-aop_t aop_ulong_skip_cmp(unsigned long actual, unsigned long expected, aopmode_t mode);
-aop_t aop_ullong_skip_cmp(unsigned long long actual, unsigned long long expected, aopmode_t mode);
+aop_t aop_uchar_skip_cmp(aopmode_t mode, unsigned char actual, unsigned char expected);
+aop_t aop_ushrt_skip_cmp(aopmode_t mode, unsigned short actual, unsigned short expected);
+aop_t aop_uint_skip_cmp(aopmode_t mode, unsigned actual, unsigned expected);
+aop_t aop_ulong_skip_cmp(aopmode_t mode, unsigned long actual, unsigned long expected);
+aop_t aop_ullong_skip_cmp(aopmode_t mode, unsigned long long actual, unsigned long long expected);
 
-aop_t aop_flt_skip_cmp(float actual, float expected, float reltol, float abstol, aopmode_t mode);
-aop_t aop_dbl_skip_cmp(double actual, double expected, double reltol, double abstol,
-	aopmode_t mode);
+aop_t aop_flt_skip_cmp(aopmode_t mode, float actual, float expected, float reltol, float abstol);
+aop_t aop_dbl_skip_cmp(aopmode_t mode, double actual, double expected, double reltol, double abstol);
 
-aop_t aop_str_skip_cmp(const char *actual, const char *expected, aopmode_t mode);
-aop_t aop_mem_skip_cmp(const void *actual, const void *expected, size_t n, size_t size,
-	aopmode_t mode);
-aop_t aop_list_skip_cmp(const void *actual, const void *expected,
-	int (*cmp)(const void *a, const void *e), void *(*nxt)(const void *l), aopmode_t mode);
+aop_t aop_str_skip_cmp(aopmode_t mode, const char *actual, const char *expected);
+aop_t aop_mem_skip_cmp(aopmode_t mode, const void *actual, const void *expected, size_t n, size_t size);
+aop_t aop_list_skip_cmp(aopmode_t mode, const void *actual, const void *expected,
+	int (*cmp)(const void *a, const void *e), void *(*nxt)(const void *l));
 
 #ifdef __cplusplus
 }
