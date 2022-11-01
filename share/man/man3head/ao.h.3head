@@ -1,0 +1,152 @@
+'\" te
+.\" بسم الله
+.\" Copyright (c) 2023, Asserter, Org. All Rights Reserved.
+.TH ao.h 3HEAD "5 Oct 2023" "SunOS 5.11" "Headers"
+.SH NAME
+ao.h, ao \- assert operator
+.SH SYNOPSIS
+.LP
+.nf
+\fB#include <ao/ao.h>\fR
+.fi
+
+.SH DESCRIPTION
+.sp
+.LP
+The \fB<ao/ao.h>\fR header defines the \fBaolog_t\fR type for logging assert operations. The logger should not be modified directly as assert operator performs logging automatically. However, if a custom logging is needed then disable assert operator logging by setting the field \fIinc\fR to \fBAOINC_NONE\fR and use \fBao_log()\fR function! The type is documented only for interfacing a custom \fBao_stats()\fR function and includes the following members:
+.sp
+.in +2
+.nf
+size_t nlog        /* the number of logs (cases); increasing dynamically on overflow */
+size_t ndx         /* the current index */
+size_t passed      /* the number of passed cases */
+size_t failed      /* the number of failed cases */
+size_t skipped     /* the number of skipped cases */
+.fi
+.in -2
+
+.sp
+.LP
+The \fB<ao/ao.h>\fR header defines the \fBaoinc_t\fR type through \fBtypedef\fR and defines the following assert operator incrementation behaviour:
+.sp
+.ne 2
+.mk
+.na
+\fBAOINC_AUTO\fR
+.ad
+.RS 18n
+.rt
+Automatical logging by assert operator
+.RE
+
+.sp
+.ne 2
+.mk
+.na
+\fBAOINC_NONE\fR
+.ad
+.RS 18n
+.rt
+Custom logging by calling \fBao_log()\fR function
+.RE
+
+.sp
+.LP
+The \fB<ao/ao.h>\fR header defines the \fBaomode_t\fR type through \fBtypedef\fR and defines the following assert operator modes:
+.sp
+.ne 2
+.mk
+.na
+\fBAOMODE_STOP\fR
+.ad
+.RS 18n
+.rt
+Stop the test on case failure
+.RE
+
+.sp
+.ne 2
+.mk
+.na
+\fBAOMODE_NONE\fR
+.ad
+.RS 18n
+.rt
+Continue the test on case failure
+.RE
+
+.sp
+.LP
+The \fB<ao/ao.h>\fR header defines the \fBao_t\fR type that includes the following members:
+.sp
+.in +2
+.nf
+const char *descr                              /* a test description */
+void       *data                               /* data cases or a data case generator (see \fBNOTES\fR) */
+size_t     ncase                               /* the number of data cases */
+size_t     casesz                              /* the size of a data case or zero if the generator is used */
+aop_t      (*assert_case)(void *aocase)        /* user assert operation function */
+void       (*at_case_fail)(const void *aocase) /* optional user on case fail function */ 
+void       (*at_case_exit)(void *aocase)       /* optional user on case exit function */
+size_t     (*ao_stats)(const struct ao *ao)    /* optional user statistics function */
+aoinc_t    inc                                 /* assert operator incrementor */
+aomode_t   mode                                /* assert operator mode */
+aolog_t    logger                              /* assert operator logger */
+.fi
+.in -2
+
+.SH ATTRIBUTES
+.sp
+.LP
+See \fBattributes\fR(5) for descriptions of the following attributes:
+.sp
+
+.sp
+.TS
+tab(@) box;
+cw(2.75i) |cw(2.75i)
+lw(2.75i) |lw(2.75i)
+.
+ATTRIBUTE TYPE@ATTRIBUTE VALUE
+_
+Interface Stability@Committed
+_
+MT-Level@Safe
+_
+Standard@None
+.TE
+
+.SH SEE ALSO
+.sp
+.LP
+\fBaop_eq\fR(3C), \fBaop_cmp\fR(3C), \fBaop.h\fR(3HEAD)
+
+.SH NOTES
+.sp
+.LP
+The \fBge_case()\fR generator can be run in place of \fIdata\fR. The contract: the field \fIcasesz\fR should be set to zero and \fBge_case()\fR should return the size of \fIaocase\fR when passed \fINULL\fR.
+
+.sp
+.in +2
+.nf
+aocase_t *ge_case(aocase_t *aoc)
+{
+    if (!aoc)
+        return (aocase_t *)sizeof(aocase_t);
+\&...
+    return aoc;
+}
+.fi
+.in -2
+
+.sp
+.LP
+However the contract is inserted automatically if the assert operator shell \fBao\fR is used while building tests.
+
+.SH AUTHOR
+Written by Ali Muhammed <uniapi@outlook.com>
+.SH COPYRIGHT
+Copyright (c) 2023 Asserter, Org.
+.PP
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the Open Software License ("\s-1OSL\s0"), Version 3.0
