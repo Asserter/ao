@@ -1,0 +1,73 @@
+'\" te
+.\" بسم الله
+.\" Copyright (c) 2022, Asserter, Org. All Rights Reserved.
+.TH aopf.h 3HEAD "15 Nov 2022" "SunOS 5.11" "Headers"
+.SH NAME
+aopf.h, aopf \- Assert Operation Formatted
+.SH SYNOPSIS
+.LP
+.nf
+\fB#include <ao/aopf.h>\fR
+.fi
+
+.SH DESCRIPTION
+.sp
+.LP
+The \fB<ao/aopf.h>\fR header defines the following macros to be used as inline assert operation formatted functions for \fIintegral types\fR:
+.sp
+.ne 2
+.mk
+.na
+\fBAOP_EQF\fR(\fIactual\fR, \fIexpected\fR)
+.ad
+.sp .6
+.RS 4n
+Evaluates to \fBAOP_PASS\fR if the values of \fIactual\fR and \fIexpected\fR are equal, otherwise the formatted output \fIfmt\fR 
+is placed on the standard error stream \fBstderr\fR and the operation evaluation is \fBAOP_FAIL\fR.
+.RE
+
+.sp
+.ne 2
+.mk
+.na
+\fBAOP_EQSKP\fR(\fIactual\fR, \fIexpected\fR)
+.ad
+.sp .6
+.RS 4n
+Evaluates to \fBAOP_PASS\fR if the values of \fIactual\fR and \fIexpected\fR are equal, otherwise the formatted output \fIfmt\fR
+is placed on the standard error stream \fBstderr\fR and the operation evaluation is \fBAOP_SKIP\fR.
+.RE
+
+.SH ATTRIBUTES
+.sp
+.LP
+See \fBattributes\fR(5) for descriptions of the following attributes:
+.sp
+
+.sp
+.TS
+tab(@) box;
+cw(2.75i) |cw(2.75i)
+lw(2.75i) |lw(2.75i)
+.
+ATTRIBUTE TYPE@ATTRIBUTE VALUE
+_
+Interface Stability@Committed
+_
+MT-Level@Safe
+_
+Standard@None
+.TE
+
+.SH SEE ALSO
+.sp
+.LP
+\fBaop_eq\fR(3C), \fBaop_cmp\fR(3C), \fBaop.h\fR(3HEAD), \fBao.h\fR(3HEAD)
+
+.SH AUTHOR
+Written by Ali Muhammed <uniapi@outlook.com>
+.SH COPYRIGHT
+Copyright (c) 2022 Asserter, Org.
+.PP
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the Open Software License ("\s-1OSL\s0"), Version 3.0
