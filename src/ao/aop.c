@@ -124,62 +124,62 @@ aop_t aop_list_eq(const void *actual, const void *expected,
 }
 
 
-aop_t aop_expr_skip(bool actual)
+aop_t aop_exprskp(bool actual)
 {
 	return actual ? AOP_PASS : AOP_SKIP;
 }
 
-aop_t aop_char_skip_eq(char actual, char expected)
+aop_t aop_char_eqskp(char actual, char expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_shrt_skip_eq(short actual, short expected)
+aop_t aop_shrt_eqskp(short actual, short expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_int_skip_eq(int actual, int expected)
+aop_t aop_int_eqskp(int actual, int expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_long_skip_eq(long actual, long expected)
+aop_t aop_long_eqskp(long actual, long expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_llong_skip_eq(long long actual, long long expected)
+aop_t aop_llong_eqskp(long long actual, long long expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_uchar_skip_eq(unsigned char actual, unsigned char expected)
+aop_t aop_uchar_eqskp(unsigned char actual, unsigned char expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_ushrt_skip_eq(unsigned short actual, unsigned short expected)
+aop_t aop_ushrt_eqskp(unsigned short actual, unsigned short expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_uint_skip_eq(unsigned actual, unsigned expected)
+aop_t aop_uint_eqskp(unsigned actual, unsigned expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_ulong_skip_eq(unsigned long actual, unsigned long expected)
+aop_t aop_ulong_eqskp(unsigned long actual, unsigned long expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_ullong_skip_eq(unsigned long long actual, unsigned long long expected)
+aop_t aop_ullong_eqskp(unsigned long long actual, unsigned long long expected)
 {
-	return AOP_SKIP_EQ(actual, expected);
+	return AOP_EQSKP(actual, expected);
 }
 
-aop_t aop_flt_skip_eq(float actual, float expected, float reltol, float abstol)
+aop_t aop_flt_eqskp(float actual, float expected, float reltol, float abstol)
 {
 	/*
 	 * Do: implement NaN and Inf support!
@@ -193,7 +193,7 @@ aop_t aop_flt_skip_eq(float actual, float expected, float reltol, float abstol)
 	return fabsf(actual - expected) < tol ? AOP_PASS : AOP_SKIP;
 }
 
-aop_t aop_dbl_skip_eq(double actual, double expected, double reltol, double abstol)
+aop_t aop_dbl_eqskp(double actual, double expected, double reltol, double abstol)
 {
 	/*
 	 * Do: implement NaN and Inf support!
@@ -207,7 +207,7 @@ aop_t aop_dbl_skip_eq(double actual, double expected, double reltol, double abst
 	return fabs(actual - expected) < tol ? AOP_PASS : AOP_FAIL;
 }
 
-aop_t aop_str_skip_eq(const char *actual, const char *expected)
+aop_t aop_str_eqskp(const char *actual, const char *expected)
 {
 	if (!actual || !expected) {
 		if (actual != expected)
@@ -218,7 +218,7 @@ aop_t aop_str_skip_eq(const char *actual, const char *expected)
 	return AOP_PASS;
 }
 
-aop_t aop_mem_skip_eq(const void *actual, const void *expected, size_t n, size_t size)
+aop_t aop_mem_eqskp(const void *actual, const void *expected, size_t n, size_t size)
 {
 	size_t i;
 	if (!actual || !expected)
@@ -229,7 +229,7 @@ aop_t aop_mem_skip_eq(const void *actual, const void *expected, size_t n, size_t
 	return AOP_PASS;
 }
 
-aop_t aop_list_skip_eq(const void *actual, const void *expected,
+aop_t aop_list_eqskp(const void *actual, const void *expected,
 	int (*cmp)(const void *, const void *), void *(*nxt)(const void *))
 {
 	while (actual || expected) {
@@ -342,68 +342,59 @@ aop_t aop_list_cmp(aopmode_t mode, const void *actual, const void *expected,
 }
 
 
-aop_t aop_char_skip_cmp(aopmode_t mode, char actual, char expected)
+aop_t aop_char_cmpskp(aopmode_t mode, char actual, char expected)
 {
-	return AOP_SKIP_CMP(mode, actual, expected);
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
-aop_t aop_shrt_skip_cmp(aopmode_t mode, short actual, short expected)
+aop_t aop_shrt_cmpskp(aopmode_t mode, short actual, short expected)
 {
-	return AOP_SKIP_CMP(mode, actual, expected);
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
-aop_t aop_int_skip_cmp(aopmode_t mode, int actual, int expected)
+aop_t aop_int_cmpskp(aopmode_t mode, int actual, int expected)
 {
-	return AOP_SKIP_CMP(mode, actual, expected);
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
-aop_t aop_long_skip_cmp(aopmode_t mode, long actual, long expected)
+aop_t aop_long_cmpskp(aopmode_t mode, long actual, long expected)
 {
-	return AOP_SKIP_CMP(mode, actual, expected);
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
-aop_t aop_llong_skip_cmp(aopmode_t mode, long long actual, long long expected)
+aop_t aop_llong_cmpskp(aopmode_t mode, long long actual, long long expected)
 {
-	return AOP_SKIP_CMP(mode, actual, expected);
-}
-
-
-aop_t aop_uchar_skip_cmp(aopmode_t mode, unsigned char actual, unsigned char expected)
-{
-	return AOP_SKIP_CMP(mode, actual, expected);
-}
-
-aop_t aop_ushrt_skip_cmp(aopmode_t mode, unsigned short actual, unsigned short expected)
-{
-	return AOP_SKIP_CMP(mode, actual, expected);
-}
-
-aop_t aop_uint_skip_cmp(aopmode_t mode, unsigned actual, unsigned expected)
-{
-	return AOP_SKIP_CMP(mode, actual, expected);
-}
-
-aop_t aop_ulong_skip_cmp(aopmode_t mode, unsigned long actual, unsigned long expected)
-{
-	return AOP_SKIP_CMP(mode, actual, expected);
-}
-
-aop_t aop_ullong_skip_cmp(aopmode_t mode, unsigned long long actual, unsigned long long expected)
-{
-	return AOP_SKIP_CMP(mode, actual, expected);
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
 
-aop_t aop_flt_skip_cmp(aopmode_t mode, float actual, float expected, float reltol, float abstol)
+aop_t aop_uchar_cmpskp(aopmode_t mode, unsigned char actual, unsigned char expected)
 {
-	aop_t aop = AOP_PASS;
-#ifndef DEBUG
-#error "Unsupplied Implementation"
-#endif
-	return aop;
+	return AOP_CMPSKP(mode, actual, expected);
 }
 
-aop_t aop_dbl_skip_cmp(aopmode_t mode, double actual, double expected, double reltol, double abstol)
+aop_t aop_ushrt_cmpskp(aopmode_t mode, unsigned short actual, unsigned short expected)
+{
+	return AOP_CMPSKP(mode, actual, expected);
+}
+
+aop_t aop_uint_cmpskp(aopmode_t mode, unsigned actual, unsigned expected)
+{
+	return AOP_CMPSKP(mode, actual, expected);
+}
+
+aop_t aop_ulong_cmpskp(aopmode_t mode, unsigned long actual, unsigned long expected)
+{
+	return AOP_CMPSKP(mode, actual, expected);
+}
+
+aop_t aop_ullong_cmpskp(aopmode_t mode, unsigned long long actual, unsigned long long expected)
+{
+	return AOP_CMPSKP(mode, actual, expected);
+}
+
+
+aop_t aop_flt_cmpskp(aopmode_t mode, float actual, float expected, float reltol, float abstol)
 {
 	aop_t aop = AOP_PASS;
 #ifndef DEBUG
@@ -412,7 +403,7 @@ aop_t aop_dbl_skip_cmp(aopmode_t mode, double actual, double expected, double re
 	return aop;
 }
 
-aop_t aop_str_skip_cmp(aopmode_t mode, const char *actual, const char *expected)
+aop_t aop_dbl_cmpskp(aopmode_t mode, double actual, double expected, double reltol, double abstol)
 {
 	aop_t aop = AOP_PASS;
 #ifndef DEBUG
@@ -421,7 +412,16 @@ aop_t aop_str_skip_cmp(aopmode_t mode, const char *actual, const char *expected)
 	return aop;
 }
 
-aop_t aop_mem_skip_cmp(aopmode_t mode, const void *actual, const void *expected, size_t n, size_t size)
+aop_t aop_str_cmpskp(aopmode_t mode, const char *actual, const char *expected)
+{
+	aop_t aop = AOP_PASS;
+#ifndef DEBUG
+#error "Unsupplied Implementation"
+#endif
+	return aop;
+}
+
+aop_t aop_mem_cmpskp(aopmode_t mode, const void *actual, const void *expected, size_t n, size_t size)
 {
 	aop_t aop = AOP_PASS;
 #ifndef DEBUG
@@ -431,7 +431,7 @@ aop_t aop_mem_skip_cmp(aopmode_t mode, const void *actual, const void *expected,
 }
 
 
-aop_t aop_list_skip_cmp(aopmode_t mode, const void *actual, const void *expected,
+aop_t aop_list_cmpskp(aopmode_t mode, const void *actual, const void *expected,
 	int (*cmp)(const void *, const void *), void *(*nxt)(const void *))
 {
 	aop_t aop = AOP_PASS;
