@@ -1,0 +1,198 @@
+'\" te
+.\" بسم الله
+.\" Copyright (c) 2022, Asserter, Org. All Rights Reserved.
+.TH ao_assert 3C "Jul 2022" "SunOS 5.11" "C Library Functions"
+.SH NAME
+ao_assert \- ao assert
+.SH SYNOPSIS
+.LP
+.nf
+#include <ao/ao.h>
+
+\fBaop_t\fR \fBao_assert\fR(\fBconst char *\fR\fIdescr\fR, \fBvoid *\fR\fIdata\fR, \fBsize_t\fR \fIncase\fR, \fBsize_t\fR \fIcasesz\fR,
+	\fBaop_t (*\fR\fIassert_case\fR)(void *aocase));
+.fi
+
+.SH DESCRIPTION
+.sp
+.LP
+The \fBao_assert()\fR function runs assert operation cases with default settings.
+.SH EXAMPLES
+.LP
+\fBExample 1\fR The simplest Multiply Test.
+
+.sp
+.in +2
+.nf
+#include <ao/ao.h>
+
+extern long multiply(int a, int b);
+
+typedef struct aocase {
+	int a;
+	int b;
+	long expected;
+} aocase_t;
+
+aop_t assert_case(aocase_t *aoc)
+{
+	return aop_long_eq(aoc->expected, multiply(aoc->a, aoc->b));
+}
+
+int main()
+{
+	aocase_t aoc[] = {
+		{ 2, 3, 6 },
+		{-2, 3,-6 },
+		\&...
+		{ 0, 1, 0 },
+		{ 0, 0, 0 }
+	};
+	return ao_assert("***** Multiply Test *****", aoc, sizeof aoc / sizeof(aocase_t), sizeof(aocase_t), assert_case);
+}
+.fi
+.in -2
+
+.LP
+\fBExample 2\fR Multiply Test with \fIexpected\fR and \fIactual\fR arguments auto formatting.
+.sp
+.in +2
+.nf
+#include <ao/ao.h>
+#include <ao/aopf.h>
+
+extern long multiply(int a, int b);
+
+typedef struct aocase {
+	int a;
+	int b;
+	long expected;
+	long actual;
+} aocase_t;
+
+aop_t assert_case(aocase_t *aoc)
+{
+	aoc->actual = multiply(aoc->a, aoc->b);
+	return aop_long_eq(aoc->expected, aoc->actual, "  a: %i\n  b: %i", aoc->a, aoc->b);
+}
+
+int main()
+{
+	aocase_t aoc[] = {
+		{ 2, 3, 6 },
+		{-2, 3,-6 },
+		\&...
+		{ 0, 1, 0 },
+		{ 0, 0, 0 }
+	};
+	return ao_assert("***** Multiply Test *****", aoc, sizeof aoc / sizeof(aocase_t), sizeof(aocase_t), assert_case);
+}
+.fi
+.in -2
+
+.LP
+\fBExample 3\fR Vowel Count Test with \fBge_case()\fR generator in place of \fIdata\fR.
+.sp
+.in +2
+.nf
+#include <ao/ao.h>
+#include <ao/aopf.h>
+#include <ge.h>
+
+extern size_t vowelcnt(const char *s);
+
+#define STRLIM	130
+
+typedef struct aocase {
+	char s[STRLIM];
+	size_t expected;
+	size_t actual;
+} aocase_t;
+
+aop_t assert_case(aocase_t *aoc)
+{
+	char s[STRLIM];
+	aoc->actual = vowelcnt(strcpy(s, aoc->s));
+	return aopf_size_eq(aoc->expected, aoc->actual, "  String: \\"%s\\"", aoc->s);
+}
+
+aocase_t *ge_case(aocase_t *aoc)
+{
+	const char *cnss = "bcdfghjklmnpqrstvwxyz";
+	const char *vwls = "aeiou";
+	size_t n;
+	if (!aoc)
+		return (aocase_t *)sizeof(aocase_t);
+	n = ge_uint_of(1, STRLIM - 1);
+	aoc->s[--n] = '\0';
+	aoc->expected = 0;
+	while (n--)
+		if (ge_uint_of(0, 5))
+			aoc->s[n] = cnss[ge_uint_of(0, 20)];
+		else
+			aoc->s[n] = vwls[ge_uint_of(0, 4)], ++aoc->expected;
+	return aoc;
+}
+
+int main()
+{
+	return ao_assert("***** Vowel Count Test *****", (void *)ge_case, 100, 0, assert_case);
+}
+.fi
+.in -2
+
+.SH ATTRIBUTES
+.sp
+.LP
+See \fBattributes\fR(5) for descriptions of the following attributes:
+.sp
+
+.sp
+.TS
+tab(@) box;
+cw(2.75i) |cw(2.75i)
+lw(2.75i) |lw(2.75i)
+.
+ATTRIBUTE TYPE@ATTRIBUTE VALUE
+_
+Interface Stability@Committed
+_
+MT-Level@Safe
+_
+Standard@None
+.TE
+
+.SH SEE ALSO
+.sp
+.LP
+\fBao_run\fR(3C), \fBao_log\fR(3C), \fBao.h\fR(3HEAD), \fBaop.h\fR(3HEAD)
+
+.SH NOTES
+.sp
+.LP
+The \fBge_case()\fR generator can be run in place of \fIdata\fR. The contract: \fIcasesz\fR should be set to zero and \fBge_case()\fR should return the size of \fIaocase\fR when passed \fINULL\fR.
+
+.sp
+.in +2
+.nf
+aocase_t *ge_case(aocase_t *aoc)
+{
+    if (!aoc)
+        return (aocase_t *)sizeof(aocase_t);
+\&...
+    return aoc;
+}
+.fi
+.in -2
+
+.sp
+.LP
+However the contract is inserted automatically if the assert operator shell \fBao\fR is used while building tests.
+
+.SH AUTHOR
+Written by Ali Muhammed <uniapi@outlook.com>
+.SH COPYRIGHT
+Copyright (c) 2023 Asserter, Org.
+.PP
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the Open Software License ("\s-1OSL\s0"), Version 3.0
