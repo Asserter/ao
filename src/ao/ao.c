@@ -10,7 +10,7 @@ static __thread ao_t _ao;
 
 static size_t ao_stats(const ao_t *ao)
 {
-	fprintf(stdout, "Total Cases: %zu\n", ao->logger.nlog);
+	fprintf(stdout, "\nTotal Cases: %zu\n", ao->logger.nlog);
 	fprintf(stdout, "    Passed: %zu, Failed: %zu, Skipped: %zu\n",
 		ao->logger.passed, ao->logger.failed, ao->logger.skipped);
 	return ao->logger.nlog;
@@ -71,17 +71,20 @@ aop_t ao_run(ao_t *ao)
 		return AOP_SKIP;
 	ncase = ao->ncase;
 	data = ao->data;
+	fprintf(stdout, "%s\n", ao->descr);
 	while (ncase--) {
 		aop_t aop = (*ao->assert_case)(data);
 		if (ao->inc == AOINC_AUTO)
 			ao_log(aop, ao);
-		if (ao->fmt_case)
-			(*ao->fmt_case)(data);
 		if (ao->at_case_exit)
 			(*ao->at_case_exit)(data);
-		if (aop == AOP_FAIL && ao->mode == AOMODE_STOP) {
-			ao_stats(ao);
-			return AOP_FAIL;
+		if (aop == AOP_FAIL) {
+			if (ao->fmt_case)
+				(*ao->fmt_case)(data);
+			if (ao->mode == AOMODE_STOP) {
+				ao_stats(ao);
+				return AOP_FAIL;
+			}
 		}
 		data = (char *)data + ao->casesz;
 	}

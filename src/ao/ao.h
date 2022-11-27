@@ -35,8 +35,8 @@ typedef struct ao {
 	size_t casesz;
 	aop_t (*assert_case)(void *aocase);
 	void (*fmt_case)(const void *aocase);
+	void (*at_case_exit)(void *aocase);
 	size_t (*ao_stats)(const struct ao *ao);
-	void *(*at_case_exit)(void *);
 	aoinc_t inc;
 	aomode_t mode;
 	aolog_t logger;	/* Do not use it as overwritten automatically! */
